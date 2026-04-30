@@ -65,4 +65,12 @@ describe('envProfiles', () => {
   it('getProfileDir returns correct path', () => {
     expect(getProfileDir('/some/dir')).toBe('/some/dir/.envoy');
   });
+
+  it('overwrites an existing profile with new values', () => {
+    saveProfile('staging', { API_URL: 'https://old.example.com' }, tmpDir);
+    saveProfile('staging', { API_URL: 'https://new.example.com', DEBUG: 'true' }, tmpDir);
+
+    const profile = loadProfile('staging', tmpDir);
+    expect(profile.record).toEqual({ API_URL: 'https://new.example.com', DEBUG: 'true' });
+  });
 });
