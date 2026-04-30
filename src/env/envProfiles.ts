@@ -43,6 +43,16 @@ export function saveProfile(profileName: string, record: EnvRecord, baseDir?: st
   fs.writeFileSync(filePath, lines.join('\n') + '\n', 'utf-8');
 }
 
+export function deleteProfile(profileName: string, baseDir?: string): void {
+  const filePath = path.join(getProfileDir(baseDir), `${profileName}.env`);
+
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Profile '${profileName}' not found at ${filePath}`);
+  }
+
+  fs.unlinkSync(filePath);
+}
+
 export function listProfiles(baseDir?: string): string[] {
   const profileDir = getProfileDir(baseDir);
   if (!fs.existsSync(profileDir)) return [];
